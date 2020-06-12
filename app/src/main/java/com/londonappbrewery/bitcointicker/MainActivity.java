@@ -45,7 +45,17 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
         // TODO: Set an OnItemSelected listener on the spinner
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("Bitcoin", "" + adapterView.getItemAtPosition(i));
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.d("Bitcoin", "Nothing Selected");
+            }
+        });
     }
 
     // TODO: complete the letsDoSomeNetworking() method

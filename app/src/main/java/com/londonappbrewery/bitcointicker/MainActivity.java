@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d("Bitcoin", "" + adapterView.getItemAtPosition(i));
                 currency = "" + adapterView.getItemAtPosition(i);
+                letsDoSomeNetworking(BASE_URL);
             }
 
             @Override
@@ -69,13 +70,21 @@ public class MainActivity extends AppCompatActivity {
     private void letsDoSomeNetworking(String url) {
 
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get(BASE_URL, new JsonHttpResponseHandler() {
+        client.get(url, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // called when response HTTP status is "200 OK"
                 Log.d("Bitcoin", "JSON: " + response.toString());
 
+                try{
+                    String price;
+                    price = response.getString("price");
+                    mPriceTextView.setText(price);
+                }
+                catch(Exception e){
+                    Log.d("Bitcoin", "error: " + e);
+                }
             }
 
             @Override

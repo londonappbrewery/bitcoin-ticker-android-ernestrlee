@@ -12,9 +12,14 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
+
 import cz.msebera.android.httpclient.Header;
 
 
@@ -23,8 +28,7 @@ public class MainActivity extends AppCompatActivity {
     // Constants:
     // TODO: Create the base URL
     private final String KEY = "e6d3260bc6287e164f8ad3c8bc0cecad";
-    String currency;
-    private final String BASE_URL = "https://api.nomics.com/v1/currencies/ticker?key=" + KEY + "&ids=BTC&convert=" + currency;
+    private final String BASE_URL = "https://api.nomics.com/v1/currencies/ticker";
 
 
     // Member Variables:
@@ -53,8 +57,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d("Bitcoin", "" + adapterView.getItemAtPosition(i));
-                currency = "" + adapterView.getItemAtPosition(i);
-                letsDoSomeNetworking(BASE_URL);
+
+                String currency = "" + adapterView.getItemAtPosition(i);
+
+                RequestParams params = new RequestParams();
+                params.put("key", KEY);
+                params.put("ids", "BTC");
+                params.put("convert", currency);
+
+                letsDoSomeNetworking(BASE_URL, params);
             }
 
             @Override
@@ -65,19 +76,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // TODO: complete the letsDoSomeNetworking() method
-    private void letsDoSomeNetworking(String url) {
+    private void letsDoSomeNetworking(String url, RequestParams params) {
+
+        Log.d("Bitcoin", "" + url);
 
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get(url, new JsonHttpResponseHandler() {
+        client.get(url, params, new JsonHttpResponseHandler() {
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 // called when response HTTP status is "200 OK"
                 Log.d("Bitcoin", "JSON: " + response.toString());
 
                 try{
-                    String price;
-                    price = response.getString("price");
+                    JSONObject firstEvent = (JSONObject) response.get(0);
+                    String price = firstEvent.getString("price");
                     mPriceTextView.setText(price);
                 }
                 catch(JSONException e){

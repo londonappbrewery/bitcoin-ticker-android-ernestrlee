@@ -9,8 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Toast;
-
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -37,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPriceTextView = (TextView) findViewById(R.id.priceLabel);
-        Spinner spinner = (Spinner) findViewById(R.id.currency_spinner);
+        mPriceTextView = findViewById(R.id.priceLabel);
+        Spinner spinner = findViewById(R.id.currency_spinner);
 
         // Create an ArrayAdapter using the String array and a spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -82,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
                     price = response.getString("price");
                     mPriceTextView.setText(price);
                 }
-                catch(Exception e){
-                    Log.d("Bitcoin", "error: " + e);
+                catch(JSONException e){
+                    e.printStackTrace();
                 }
             }
 
@@ -96,9 +94,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
-
-
 }

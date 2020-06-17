@@ -21,7 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
     // Constants:
     // TODO: Create the base URL
-    private final String BASE_URL = "https://api.nomics.com/v1/currencies/ticker?";
+    private final String KEY = "e6d3260bc6287e164f8ad3c8bc0cecad";
+    String currency;
+    private final String BASE_URL = "https://api.nomics.com/v1/currencies/ticker?key=" + KEY + "&ids=BTC&convert=" + currency;
+
 
     // Member Variables:
     TextView mPriceTextView;
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d("Bitcoin", "" + adapterView.getItemAtPosition(i));
+                currency = "" + adapterView.getItemAtPosition(i);
             }
 
             @Override
